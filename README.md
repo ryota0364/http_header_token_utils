@@ -20,3 +20,10 @@ The deliberate trade-off is that this library does not interpret semantics (no p
 ## Edge cases
 
 Obs-fold (CRLF followed by space or tab, from multi-line headers) is collapsed to a single space before tokenising. This means a folded header and its single-line equivalent parse identically. Inside a quoted-string, a backslash followed by any character is preserved exactly as written — no unescaping is performed. An unterminated quoted-string or a dangling backslash raises `ValueError`; non-string input raises `TypeError`.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
